@@ -1,0 +1,13 @@
+# Task E — Explain My Own Code
+
+**AI Engineering Session 3 — Assignment 3**
+
+**Selected Function:** `top_scorer(records)`
+
+The `top_scorer(records)` function identifies and returns the name of the student with the highest score from a list of student records. Each record is represented as a dictionary containing information such as the student's name, score and country. I designed the function to accept these records as input and return only the name of the highest-scoring student. For example, when applied to my dataset of eight students, the function returns "Lena", who achieved the highest score of 91. If the input list is empty, the function returns `None`.
+
+I included the statement `if not records: return None` as a guard clause to handle an empty list before attempting to identify the highest scorer. In Python, an empty list evaluates to `False` in a Boolean context, so the condition detects when no student records are available. Without this check, calling `max()` on an empty list would raise a `ValueError`. Returning `None` provides a clear and safe indication that no highest scorer exists, making the function more reliable when handling incomplete or empty datasets.
+
+The lambda expression, `lambda student: student["score"]`, is a small anonymous function that extracts the score from each student's dictionary. I used it with the `key` parameter of the `max()` function to specify how student records should be compared. Rather than comparing entire dictionaries, Python evaluates their numerical score values and identifies the student with the highest score. Importantly, `max()` returns the complete dictionary belonging to that student, rather than returning only the score. This approach makes the code concise, readable and suitable for processing structured student records.
+
+Finally, I used `return highest_student["name"]` to extract and return only the student's name from the dictionary identified by `max()`. This decision ensures that the function produces exactly the output required by the assignment, without returning unnecessary information. I also included a docstring to explain the function's purpose and behaviour, making the code easier for other developers to understand and maintain. Overall, I chose this approach because it combines readability, code reusability, efficient data processing and appropriate handling of empty inputs, which are important principles in Python programming and AI Engineering.
