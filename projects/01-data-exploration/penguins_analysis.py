@@ -105,3 +105,120 @@ OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 clean_df.to_csv(OUTPUT_PATH, index=False)
 
 print("\nCleaned dataset saved to:", OUTPUT_PATH)
+
+# ==================================================
+# TASK C: FIVE ANALYTICAL QUESTIONS
+# ==================================================
+
+print("\n=== QUESTION 1 ===")
+print("What is the average body mass of each penguin species?")
+
+# Group the cleaned data by species.
+# Calculate the average body mass for each group.
+average_mass = (
+    clean_df.groupby("species")["body_mass_g"]
+    .mean()
+    .round(2)
+)
+
+print("\nAverage body mass by species (grams):")
+print(average_mass)
+
+# ==================================================
+# QUESTION 2: AVERAGE FLIPPER LENGTH BY SPECIES
+# ==================================================
+
+print("\n=== QUESTION 2 ===")
+print("How does average flipper length vary across penguin species?")
+
+# Group the cleaned dataset by species.
+# Calculate the average flipper length in millimetres.
+average_flipper = (
+    clean_df.groupby("species")["flipper_length_mm"]
+    .mean()
+    .round(2)
+)
+
+print("\nAverage flipper length by species (mm):")
+print(average_flipper)
+
+# ==================================================
+# QUESTION 3: PENGUINS WEIGHING MORE THAN 5000 GRAMS
+# ==================================================
+
+print("\n=== QUESTION 3 ===")
+print("How many penguins weigh more than 5,000 grams,")
+print("and which species do they belong to?")
+
+# Filter penguins weighing strictly more than 5000 grams.
+heavy_penguins = clean_df[clean_df["body_mass_g"] > 5000]
+
+# Count the filtered records.
+heavy_count = len(heavy_penguins)
+
+print("\nTotal penguins weighing more than 5000 g:")
+print(heavy_count)
+
+# Count the heavy penguins by species.
+heavy_species_counts = heavy_penguins["species"].value_counts()
+
+print("\nHeavy penguins by species:")
+print(heavy_species_counts)
+
+# ==================================================
+# QUESTION 4: GENTOO PENGUINS WITH LONG FLIPPERS
+# ==================================================
+
+print("\n=== QUESTION 4 ===")
+print("How many Gentoo penguins have flippers longer than 220 mm?")
+
+# Filter using two conditions:
+# 1. Species must be Gentoo.
+# 2. Flipper length must be greater than 220 mm.
+long_flipper_gentoo = clean_df[
+    (clean_df["species"] == "Gentoo")
+    & (clean_df["flipper_length_mm"] > 220)
+]
+
+# Count the penguins that satisfy both conditions.
+long_flipper_count = len(long_flipper_gentoo)
+
+print("\nNumber of Gentoo penguins with flippers over 220 mm:")
+print(long_flipper_count)
+
+# Calculate the total number of Gentoo penguins.
+total_gentoo = (clean_df["species"] == "Gentoo").sum()
+
+# Calculate the percentage of Gentoo penguins
+# whose flippers exceed 220 mm.
+percentage = (long_flipper_count / total_gentoo) * 100
+
+print("\nTotal Gentoo penguins:", total_gentoo)
+print(f"Percentage with flippers over 220 mm: {percentage:.2f}%")
+
+# ==================================================
+# QUESTION 5: AVERAGE BODY MASS BY SPECIES AND ISLAND
+# ==================================================
+
+print("\n=== QUESTION 5 ===")
+print("How does average body mass vary by species and island?")
+
+# Group penguins by both species and island.
+# Calculate the mean body mass for each group.
+average_mass_by_island = (
+    clean_df.groupby(["species", "island"])["body_mass_g"]
+    .mean()
+    .round(2)
+)
+
+print("\nAverage body mass by species and island (grams):")
+print(average_mass_by_island)
+
+# Count observations in each species-island group.
+group_counts = (
+    clean_df.groupby(["species", "island"])
+    .size()
+)
+
+print("\nNumber of penguins in each group:")
+print(group_counts)
