@@ -298,5 +298,3 @@ for species, species_data in clean_df.groupby("species"):
         f"{species}: r = {correlation:.3f} "
         f"(n = {len(species_data)})"
     )
-    
-
