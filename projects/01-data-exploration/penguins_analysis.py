@@ -222,3 +222,81 @@ group_counts = (
 
 print("\nNumber of penguins in each group:")
 print(group_counts)
+
+# ==================================================
+# QUESTION 6: BODY MASS BY SPECIES AND SEX
+# ==================================================
+
+print("\n=== QUESTION 6 ===")
+print("How does average body mass differ between male and "
+      "female penguins within each species?")
+
+# Exclude missing sex values only for this analysis.
+sex_df = clean_df.dropna(subset=["sex"]).copy()
+
+# Group by species and sex, then calculate
+# the number of penguins and average body mass.
+sex_mass_summary = (
+    sex_df.groupby(["species", "sex"])
+    .agg(
+        count=("body_mass_g", "size"),
+        average_mass_g=("body_mass_g", "mean")
+    )
+    .round(2)
+)
+
+print("\nAverage body mass by species and sex:")
+print(sex_mass_summary)
+
+# Compare male and female averages within each species.
+sex_mass_comparison = (
+    sex_df.groupby(["species", "sex"])["body_mass_g"]
+    .mean()
+    .unstack()
+)
+
+sex_mass_comparison["male_minus_female_g"] = (
+    sex_mass_comparison["MALE"]
+    - sex_mass_comparison["FEMALE"]
+)
+
+print("\nMale minus female average body mass (grams):")
+print(sex_mass_comparison["male_minus_female_g"].round(2))
+
+print("\nRecords included:", len(sex_df))
+print("Records excluded due to missing sex:",
+      clean_df["sex"].isna().sum())
+
+
+# ==================================================
+# QUESTION 7: FLIPPER LENGTH AND BODY MASS CORRELATION
+# ==================================================
+
+print("\n=== QUESTION 7 ===")
+print(
+    "What is the relationship between flipper length and "
+    "body mass, overall and within each species?"
+)
+
+# Calculate the overall Pearson correlation.
+overall_correlation = clean_df[
+    ["flipper_length_mm", "body_mass_g"]
+].corr().loc["flipper_length_mm", "body_mass_g"]
+
+print("\nOverall Pearson correlation:")
+print(round(overall_correlation, 3))
+
+# Calculate the correlation separately for each species.
+print("\nPearson correlation by species:")
+
+for species, species_data in clean_df.groupby("species"):
+    correlation = species_data[
+        ["flipper_length_mm", "body_mass_g"]
+    ].corr().loc["flipper_length_mm", "body_mass_g"]
+
+    print(
+        f"{species}: r = {correlation:.3f} "
+        f"(n = {len(species_data)})"
+    )
+    
+

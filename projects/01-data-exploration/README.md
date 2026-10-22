@@ -8,7 +8,8 @@
 
 This project explores the Palmer Penguins dataset using Python and Pandas. The objective is to practise loading, inspecting, cleaning, filtering and grouping real-world data, then communicate the findings clearly.
 
-The analysis investigates differences in body mass and flipper length across three penguin species and their recorded islands.
+The analysis investigates differences in body mass and flipper length across species, islands and recorded sex, as well as the relationship
+between physical measurements. Seven analytical questions are explored.
 
 ## 2. Dataset Description
 
@@ -85,6 +86,40 @@ Of these, **35 (28.46%)** have flippers longer than 220 mm, while 88 have flippe
 
 An important limitation is that Gentoo penguins occur only on Biscoe Island and Chinstrap penguins only on Dream Island in this dataset. Consequently, species and island effects cannot be reliably separated through these simple group comparisons.
 
+### Question 6: How does average body mass differ between male and female penguins within each species?
+
+| Species | Female average | Male average | Male–female difference |
+|---|---:|---:|---:|
+| Adelie | 3,368.84 g | 4,043.49 g | 674.66 g |
+| Chinstrap | 3,527.21 g | 3,938.97 g | 411.76 g |
+| Gentoo | 4,679.74 g | 5,484.84 g | 805.09 g |
+
+**Finding:** Among 333 penguins with recorded sex, males have
+a higher average body mass than females in all three species.
+The largest difference occurs among Gentoo penguins (805.09 g),
+followed by Adelie (674.66 g) and Chinstrap (411.76 g).
+
+Nine records with missing sex information were excluded only
+from this comparison.
+
+### Question 7: What is the relationship between flipper length and body mass?
+
+| Penguin group | Pearson correlation (r) | Records |
+|---|---:|---:|
+| All penguins | 0.871 | 342 |
+| Adelie | 0.468 | 151 |
+| Chinstrap | 0.642 | 68 |
+| Gentoo | 0.703 | 123 |
+
+**Finding:** A strong positive correlation exists between flipper
+length and body mass across all penguins (r = 0.871).
+However, correlations within individual species are lower.
+
+This suggests that differences between species contribute to
+the strong overall relationship. Longer flippers are generally
+associated with greater body mass, but correlation does not
+establish causation.
+
 ## 5. Limitations
 
 The analysis is descriptive rather than causal. Observed differences do not establish why penguin measurements vary.
@@ -113,3 +148,62 @@ With additional time, this project could be extended by:
 **Tools:** Python, Pandas, Ubuntu (WSL2), VS Code and Git/GitHub.
 
 **Skills:** CSV data loading, exploratory data analysis, missing-value assessment, duplicate checks, data cleaning, Boolean filtering, grouping, aggregation, reproducible analysis and technical documentation.
+
+## 9. How to Reproduce This Analysis
+
+This project can be reproduced using Python and Pandas.
+
+### Requirements
+
+- Python 3.11 or later
+- Pandas
+- Git
+
+### Run the Project
+
+1. Clone the GitHub repository:
+
+   git clone https://github.com/ClintonNjoku2020/ai-engineering-journey.git
+
+2. Navigate to the project directory:
+
+   cd ai-engineering-journey/projects/01-data-exploration
+
+3. Create and activate a Python virtual environment:
+
+   python3 -m venv venv
+   source venv/bin/activate
+
+4. Install Pandas:
+
+   python -m pip install pandas
+
+5. Run the analysis:
+
+   python penguins_analysis.py
+
+### Dataset Source
+
+The original dataset is included in the `data/` directory
+as `penguins.csv`.
+
+It was obtained from:
+
+https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv
+
+To download a fresh copy, run:
+
+   curl -fL https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv -o data/penguins.csv
+
+The analysis script loads the dataset from the local `data/`
+directory and saves the cleaned version to `output/`.
+
+### Reproducibility Notes
+
+The original CSV file is preserved to allow the cleaning
+process to be repeated.
+
+The analysis does not modify the source dataset.
+
+The same cleaning and analytical procedures can be rerun
+using the supplied Python script.
