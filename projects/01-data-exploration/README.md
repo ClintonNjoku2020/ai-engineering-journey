@@ -1,8 +1,8 @@
 # Palmer Penguins: Exploratory Data Analysis Using Pandas
 
 **Author:** Clinton Njoku  
-**Programme:** Refonte Learning — AI Engineering Training and Internship Programme  
-**Assignment:** Session 4 — Pandas: Working With Real Data
+**Programme:** My AI Engineering Journey. 
+**Practice:** Session 4 — Pandas: Working With Real Data
 
 ## 1. Project Overview
 
