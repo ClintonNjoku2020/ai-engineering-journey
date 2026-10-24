@@ -107,7 +107,7 @@ clean_df.to_csv(OUTPUT_PATH, index=False)
 print("\nCleaned dataset saved to:", OUTPUT_PATH)
 
 # ==================================================
-# TASK C: FIVE ANALYTICAL QUESTIONS
+# TASK C: SEVEN ANALYTICAL QUESTIONS
 # ==================================================
 
 print("\n=== QUESTION 1 ===")

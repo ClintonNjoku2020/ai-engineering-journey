@@ -140,7 +140,7 @@ With additional time, this project could be extended by:
 - `data/penguins.csv` — Original dataset.
 - `output/penguins_cleaned.csv` — Cleaned dataset.
 - `penguins_analysis.py` — Inspection, cleaning and analytical code.
-- `analysis_questions.md` — Five research questions and analytical approach.
+- `analysis_questions.md` — Seven research questions and analytical approach.
 - `README.md` — Project documentation and findings.
 
 ## 8. Tools and Skills Demonstrated
