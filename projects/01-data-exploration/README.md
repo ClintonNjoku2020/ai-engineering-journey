@@ -207,3 +207,9 @@ The analysis does not modify the source dataset.
 
 The same cleaning and analytical procedures can be rerun
 using the supplied Python script.
+
+## Session 5 — Task B: Date Parsing and Data Reliability
+
+This experiment demonstrates how incorrect date-format assumptions can silently distort analytical results: interpreting UK-formatted dates as US-formatted dates reduced January's record count from four to zero and caused two of six records to become invalid (`NaT`). The incorrect monthly distribution could lead to misleading conclusions about business activity, even though the underlying records have not changed. Therefore, when working with data collected by others, I should verify the original date format, use explicit parsing rules where possible, and validate converted dates before performing analysis.
+
+**Python script:** [date_parsing_experiment.py](date_parsing_experiment.py)
