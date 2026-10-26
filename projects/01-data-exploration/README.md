@@ -264,3 +264,41 @@ Two penguin observations have missing body-mass measurements. These were exclude
 - [Merge and Analyse Penguin Data](merge_penguins.py)
 
 Run the scripts from the repository root using Python and Pandas.
+
+## Session 5 — Task D: Data Visualisation
+
+### Objective
+
+Create three different Matplotlib visualisations from the Palmer Penguins dataset to communicate findings about body mass, flipper length distribution, and the relationship between physical measurements.
+
+### Chart 1: Gentoo Penguins Have the Highest Average Body Mass
+
+![Average penguin body mass by species](output/average_body_mass_by_species.png)
+
+Gentoo penguins have the highest average body mass at 5,076.02 g, compared with 3,733.09 g for Chinstrap and 3,700.66 g for Adelie penguins. This comparison highlights important differences in body mass between the three species.
+
+### Chart 2: Flipper Length Distribution Shows Two Broad Clusters
+
+![Distribution of penguin flipper lengths](output/flipper_length_distribution.png)
+
+The histogram of 342 valid measurements shows two broad concentrations of flipper lengths, approximately around 190–195 mm and 210–220 mm, with an overall mean of 200.92 mm. This suggests that the population contains groups with different typical flipper lengths and that the overall mean does not fully describe the distribution.
+
+### Chart 3: Longer Flippers Are Associated with Greater Body Mass
+
+![Relationship between flipper length and body mass](output/flipper_length_vs_body_mass.png)
+
+The scatter plot shows a strong positive overall relationship between flipper length and body mass, with a Pearson correlation coefficient of 0.871 across 342 complete observations. The species-coloured clusters indicate that differences between penguin species contribute to the observed relationship, so the correlation should not be interpreted as evidence of causation.
+
+### Reproducibility
+
+All three charts were generated using Matplotlib and saved as PNG files in the `output/` directory.
+
+**Python script:** [create_charts.py](create_charts.py)
+
+To reproduce the charts from the repository root:
+
+```bash
+python projects/01-data-exploration/create_charts.py
+```
+
+Missing numerical measurements were excluded from the relevant calculations without altering the original dataset.
