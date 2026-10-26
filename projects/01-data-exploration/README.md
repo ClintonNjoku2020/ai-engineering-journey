@@ -213,3 +213,54 @@ using the supplied Python script.
 This experiment demonstrates how incorrect date-format assumptions can silently distort analytical results: interpreting UK-formatted dates as US-formatted dates reduced January's record count from four to zero and caused two of six records to become invalid (`NaT`). The incorrect monthly distribution could lead to misleading conclusions about business activity, even though the underlying records have not changed. Therefore, when working with data collected by others, I should verify the original date format, use explicit parsing rules where possible, and validate converted dates before performing analysis.
 
 **Python script:** [date_parsing_experiment.py](date_parsing_experiment.py)
+
+## Session 5 — Task C: Merging Two Datasets
+
+### Objective
+
+To combine penguin observations with a species reference table, compare inner and left joins, and answer an analytical question requiring information from both datasets.
+
+### Datasets
+
+- **Primary dataset:** `data/penguins.csv` — 344 observations and 7 columns.
+- **Reference dataset:** `data/species_reference.csv` — 4 species and 2 columns.
+- **Merge key:** `species`.
+
+The reference dataset provides scientific genus information that is absent from the original Penguins dataset.
+
+### Merge Method and Validation
+
+Both inner and left joins were performed using Pandas `merge()`, with `validate="many_to_one"` to prevent unintended duplication of observations.
+
+| Metric | Result |
+|---|---:|
+| Original penguin observations | 344 |
+| Inner join rows | 344 |
+| Left join rows | 344 |
+| Difference in row counts | 0 |
+| Unmatched penguin observations | 0 |
+
+**Selected join: Left join.** A left join was chosen to preserve all original penguin observations while enriching them with scientific genus information. Although both joins produced identical row counts in this experiment, a left join would retain unmatched observations in future datasets.
+
+### Analytical Question
+
+**What is the average body mass of each observed penguin species, together with its scientific genus?**
+
+| Species | Genus | Observations | Valid body masses | Average body mass (g) |
+|---|---|---:|---:|---:|
+| Adelie | Pygoscelis | 152 | 151 | 3,700.66 |
+| Chinstrap | Pygoscelis | 68 | 68 | 3,733.09 |
+| Gentoo | Pygoscelis | 124 | 123 | 5,076.02 |
+
+### Findings
+
+Gentoo penguins have the highest average body mass at 5,076.02 g, while Adelie and Chinstrap penguins have similar averages. All three observed species belong to the genus *Pygoscelis*, demonstrating how the reference table enriches the original observations with additional biological classification information.
+
+Two penguin observations have missing body-mass measurements. These were excluded from the average calculations without removing the corresponding records from the merged dataset.
+
+### Reproducibility
+
+- [Create Species Reference Table](create_species_reference.py)
+- [Merge and Analyse Penguin Data](merge_penguins.py)
+
+Run the scripts from the repository root using Python and Pandas.
