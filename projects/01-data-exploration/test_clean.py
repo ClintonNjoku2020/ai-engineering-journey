@@ -87,3 +87,31 @@ assert pd.isna(cleaned_products["price"].iloc[1])
 assert cleaned_products["quantity"].iloc[1] == 10
 
 print("\nSecond dataset test passed!")
+
+# Regression test: numeric columns containing "id" must still convert.
+print("\n=== IDENTIFIER DETECTION REGRESSION TEST ===")
+
+raw_identifiers = pd.DataFrame({
+    "customer_id": ["00123", "00456"],
+    "width": ["120.5", "85.0"],
+    "valid_count": ["10", "25"],
+    "product_code": ["0007", "0008"]
+})
+
+cleaned_identifiers = clean_data(raw_identifiers)
+
+print(cleaned_identifiers)
+print(cleaned_identifiers.dtypes)
+
+# Genuine identifiers must retain their leading zeros.
+assert cleaned_identifiers["customer_id"].iloc[0] == "00123"
+assert cleaned_identifiers["product_code"].iloc[0] == "0007"
+
+# Numeric measurements must be converted successfully.
+assert pd.api.types.is_numeric_dtype(cleaned_identifiers["width"])
+assert pd.api.types.is_numeric_dtype(cleaned_identifiers["valid_count"])
+
+assert cleaned_identifiers["width"].iloc[0] == 120.5
+assert cleaned_identifiers["valid_count"].iloc[1] == 25
+
+print("\nIdentifier detection regression tests passed!")

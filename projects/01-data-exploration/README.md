@@ -151,6 +151,24 @@ With additional time, this project could be extended by:
 
 ## 9. How to Reproduce This Analysis
 
+### Tested Software Environment
+
+This project was developed and tested using:
+
+- **Python:** 3.14.4
+- **Pandas:** 3.0.6
+- **Matplotlib:** 3.11.2
+
+The required Python libraries and their tested versions are recorded in [requirements.txt](requirements.txt).
+
+To install the project dependencies from the repository root, run:
+
+```bash
+python -m pip install -r projects/01-data-exploration/requirements.txt
+```
+
+Using the documented versions helps reproduce the analysis and reduces compatibility differences between environments.
+
 This project can be reproduced using Python and Pandas.
 
 ### Requirements
@@ -208,11 +226,56 @@ The analysis does not modify the source dataset.
 The same cleaning and analytical procedures can be rerun
 using the supplied Python script.
 
+
 ## Session 5 — Task B: Date Parsing and Data Reliability
 
-This experiment demonstrates how incorrect date-format assumptions can silently distort analytical results: interpreting UK-formatted dates as US-formatted dates reduced January's record count from four to zero and caused two of six records to become invalid (`NaT`). The incorrect monthly distribution could lead to misleading conclusions about business activity, even though the underlying records have not changed. Therefore, when working with data collected by others, I should verify the original date format, use explicit parsing rules where possible, and validate converted dates before performing analysis.
+### Objective
 
-**Python script:** [date_parsing_experiment.py](date_parsing_experiment.py)
+Demonstrate how incorrectly interpreting ambiguous dates can silently change analytical results, even when every date parses successfully.
+
+### Experiment
+
+Six dates were recorded in UK day/month/year format. Each date was deliberately chosen so that both the day and month were 12 or below.
+
+The same dates were parsed using:
+
+- **Correct interpretation:** `dayfirst=True`
+- **Incorrect interpretation:** `dayfirst=False`
+
+Both interpretations produced six valid dates and zero missing values (`NaT`).
+
+### Monthly Record Count Comparison
+
+| Month | Correct UK Parsing | Incorrect US Parsing | Difference |
+|---|---:|---:|---:|
+| January | 4 | 0 | -4 |
+| February | 0 | 1 | +1 |
+| March | 2 | 1 | -1 |
+| April | 0 | 2 | +2 |
+| May | 0 | 1 | +1 |
+| June | 0 | 1 | +1 |
+| July–December | 0 | 0 | 0 |
+| **Total** | **6** | **6** | **0** |
+
+### Findings and Data Reliability
+
+The experiment demonstrates a silent data-quality error: every date remains valid, but records are assigned to incorrect months.
+
+For example, `03/01/2026` represents 3 January 2026 in UK format but becomes 1 March 2026 when interpreted using US conventions.
+
+This is particularly dangerous because the dataset contains no parsing failures, no missing dates, and no lost records. Simple validation checks may therefore pass while monthly trends and business conclusions become incorrect.
+
+Date formats should be established from the data source, and date-parsing assumptions should be tested before using external data for analysis.
+
+### Reproducibility
+
+**Script:** [date_parsing_experiment.py](date_parsing_experiment.py)
+
+Run from the repository root:
+
+```bash
+python projects/01-data-exploration/date_parsing_experiment.py
+```
 
 ## Session 5 — Task C: Merging Two Datasets
 
@@ -244,19 +307,48 @@ Both inner and left joins were performed using Pandas `merge()`, with `validate=
 
 ### Analytical Question
 
-**What is the average body mass of each observed penguin species, together with its scientific genus?**
+**What percentage of observed penguins belongs to each scientific genus, using the external species reference table?**
 
-| Species | Genus | Observations | Valid body masses | Average body mass (g) |
-|---|---|---:|---:|---:|
-| Adelie | Pygoscelis | 152 | 151 | 3,700.66 |
-| Chinstrap | Pygoscelis | 68 | 68 | 3,733.09 |
-| Gentoo | Pygoscelis | 124 | 123 | 5,076.02 |
+This question genuinely requires both datasets:
 
-### Findings
+- The Penguins dataset provides the individual observations and species names.
+- The species reference dataset provides the scientific genus for each species.
 
-Gentoo penguins have the highest average body mass at 5,076.02 g, while Adelie and Chinstrap penguins have similar averages. All three observed species belong to the genus *Pygoscelis*, demonstrating how the reference table enriches the original observations with additional biological classification information.
+Neither dataset alone contains both the observation counts and the genus classification.
 
-Two penguin observations have missing body-mass measurements. These were excluded from the average calculations without removing the corresponding records from the merged dataset.
+### Genus-Level Analysis
+
+| Genus | Observations | Observed Species | Percentage |
+|---|---:|---:|---:|
+| Pygoscelis | 344 | 3 | 100.00% |
+
+All 344 observed penguins belong to the genus *Pygoscelis*, covering Adelie, Chinstrap and Gentoo.
+
+The reference dataset also contains Emperor penguins, classified under *Aptenodytes*. However, Emperor penguins are absent from the observation dataset, so they do not contribute to the observed genus percentages.
+
+This demonstrates how a reference table can provide classification information required for a new analysis.
+
+### Synthetic Unmatched-Key Demonstration
+
+A separate synthetic dataset was created to demonstrate the practical difference between inner and left joins.
+
+The demonstration contains four observations, including one deliberately unmatched species called `Mystery`.
+
+| Metric | Result |
+|---|---:|
+| Original synthetic observations | 4 |
+| Inner join rows | 3 |
+| Left join rows | 4 |
+| Difference | 1 |
+| Unmatched species | Mystery |
+
+The inner join removes the unmatched `Mystery` observation because its key does not exist in the reference table.
+
+The left join retains all four observations, assigning a missing genus (`NaN`) to `Mystery` and marking it as `left_only` in the merge indicator.
+
+**Conclusion:** A left join is appropriate when the objective is to preserve all original observations, even if reference information is incomplete.
+
+The synthetic demonstration is separate from the original Palmer Penguins dataset. No real penguin observations or reference records were modified.
 
 ### Reproducibility
 

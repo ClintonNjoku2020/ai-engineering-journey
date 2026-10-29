@@ -146,7 +146,7 @@ ax.axvline(
 
 # Add a finding-focused title and labelled axes.
 ax.set_title(
-    "Penguin flipper lengths show variation across the population",
+    "Penguin Flipper Lengths Form Two Broad Clusters",
     fontsize=14,
     fontweight="bold",
     pad=15

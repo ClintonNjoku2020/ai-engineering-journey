@@ -40,7 +40,7 @@ def clean_data(df, title_columns=None):
 
     # Step 1: Clean whitespace and capitalisation in text columns.
     text_columns = cleaned_df.select_dtypes(
-        include=["object", "string", "str"]
+        include=["object", "string"]
     ).columns
     for column in text_columns:
         # Strip spaces without changing missing values.
@@ -67,7 +67,7 @@ def clean_data(df, title_columns=None):
         "n/a", "na", "unknown", "none", "null", "-", ""
     }
     for column in cleaned_df.select_dtypes(
-        include=["object", "string", "str"]
+        include=["object", "string"]
     ).columns:
         cleaned_df[column] = cleaned_df[column].map(
             lambda value: pd.NA
@@ -76,16 +76,26 @@ def clean_data(df, title_columns=None):
             else value
         )
 
-
     # Step 3: Convert numeric-looking text columns to numbers.
-    # Avoid changing IDs, dates, and other categorical identifiers.
-    excluded_columns = ("id", "date", "code", "phone", "postcode", "zip")
+    # Protect identifiers and categorical codes from conversion.
+    excluded_exact = {
+        "id", "date", "code", "phone", "postcode", "zip"
+    }
+    excluded_suffixes = (
+        "_id", "_date", "_code", "_phone", "_postcode", "_zip"
+    )
 
     for column in cleaned_df.select_dtypes(
-        include=["object", "string", "str"]
+        include=["object", "string"]
     ).columns:
-        if any(term in column.lower() for term in excluded_columns):
+        column_name = str(column).strip().lower()
+
+        if (
+            column_name in excluded_exact
+            or column_name.endswith(excluded_suffixes)
+        ):
             continue
+
 
         # Remove commas used as thousands separators.
         numeric_text = cleaned_df[column].map(
