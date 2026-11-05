@@ -16,3 +16,15 @@ venv/
 # Operating system files
 .DS_Store
 Thumbs.db
+# Private keys and certificates
+*.key
+*.pem
+id_rsa
+id_ed25519
+
+# Additional Python environment directories
+env/
+ENV/
+
+# Raw data that should not be committed
+data/raw/
