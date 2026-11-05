@@ -8,6 +8,41 @@ Task B: Inspect and Clean
 from pathlib import Path
 import pandas as pd
 
+
+def calculate_summary_stats(df, column):
+    """
+    Calculate descriptive statistics for a numeric DataFrame column.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The input dataset.
+    column : str
+        The numeric column to analyse.
+
+    Returns
+    -------
+    dict
+        Count, mean, minimum, maximum, and standard deviation.
+    """
+    if column not in df.columns:
+        raise ValueError(f"Column '{column}' not found in DataFrame.")
+
+    if not pd.api.types.is_numeric_dtype(df[column]):
+        raise TypeError(f"Column '{column}' must be numeric.")
+
+    values = df[column].dropna()
+
+    if values.empty:
+        raise ValueError(f"Column '{column}' contains no valid values.")
+
+    return {
+        "count": int(values.count()),
+        "mean": round(float(values.mean()), 2),
+        "min": round(float(values.min()), 2),
+        "max": round(float(values.max()), 2),
+        "std": round(float(values.std()), 2),
+    }
 # Locate the project folder and raw dataset.
 PROJECT_DIR = Path(__file__).resolve().parent
 DATA_PATH = PROJECT_DIR / "data" / "penguins.csv"
