@@ -114,3 +114,15 @@ python pipeline.py
 
 The pipeline uses the settings in `config.py` and saves
 the results to `output/species_summary.csv`.
+
+## Understanding `return` versus `print()`
+
+In Python, `print()` displays information on the screen, while `return` sends a value back to the code that called a function. Printing is useful for checking results, but returning values allows other functions to use them.
+
+In my Session 7 pipeline, `load_data()` returns the DataFrame loaded from the CSV file. The validation and cleaning stages can then work with that DataFrame. `clean_data()` returns the cleaned DataFrame, which is passed to `add_features()`. The `add_features()` function returns a DataFrame containing the new numerical features, including the NumPy-calculated mass-to-length ratio. Finally, `summarise()` returns the grouped summary DataFrame, which the pipeline saves as a CSV file.
+
+If these functions only printed their results instead of returning them, their callers would receive `None`. The next stage would not receive the DataFrame it needs, and the pipeline would fail when trying to validate, clean, transform or save the data.
+
+For example, `print(cleaned_df)` would display the cleaned data but would not pass it to the next function. In contrast, `return cleaned_df` makes that DataFrame available for further processing.
+
+This helped me understand that `print()` is mainly for displaying information, whereas `return` is essential for connecting the stages of my reusable pipeline.
