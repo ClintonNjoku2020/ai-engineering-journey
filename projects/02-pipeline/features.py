@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import pandas as pd
 
 from config import (
@@ -48,9 +49,14 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
         result[MASS_COLUMN] / MASS_CONVERSION_FACTOR
     ).round(ROUND_DECIMALS)
 
-    result[MASS_PER_FLIPPER_COLUMN] = (
-        result[MASS_COLUMN] / result[LENGTH_COLUMN]
-    ).round(ROUND_DECIMALS)
+    # NumPy vectorised division across all measurement rows.
+    mass_values = result[MASS_COLUMN].to_numpy(dtype=float)
+    length_values = result[LENGTH_COLUMN].to_numpy(dtype=float)
+
+    result[MASS_PER_FLIPPER_COLUMN] = np.round(
+    np.divide(mass_values, length_values),
+    decimals=ROUND_DECIMALS,
+    )
 
     logger.info("Added 2 derived features")
 

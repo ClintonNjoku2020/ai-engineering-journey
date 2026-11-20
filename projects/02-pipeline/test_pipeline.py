@@ -61,7 +61,27 @@ def test_add_features():
 
     print("PASS: add_features")
 
+def test_numpy_vectorised_ratio():
+    """Verify NumPy vectorised division for multiple records."""
+    import numpy as np
 
+    df = pd.DataFrame({
+        "body_mass_g": [3750.0, 3800.0, 3250.0],
+        "flipper_length_mm": [181.0, 195.0, 193.0],
+    })
+
+    featured_df = add_features(df)
+
+    expected = np.array([20.72, 19.49, 16.84])
+
+    np.testing.assert_allclose(
+        featured_df["mass_per_flipper"].to_numpy(),
+        expected,
+        rtol=0,
+        atol=0.001,
+    )
+
+    print("PASS: NumPy vectorised ratio")
 def test_summarise():
     """Check that the species summary is correct."""
     df = clean_data(validate_data(load_data(INPUT_PATH)))
@@ -81,6 +101,7 @@ if __name__ == "__main__":
     test_validate_data_missing_column()
     test_clean_data()
     test_add_features()
+    test_numpy_vectorised_ratio()
     test_summarise()
 
-    print("\nAll 5 pipeline tests passed successfully.")
+    print("\nAll 6 pipeline tests passed successfully.")
